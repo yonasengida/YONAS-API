@@ -1,8 +1,8 @@
 {
-  "name": "GEBREW API",
+  "name": "AUTAR API",
   "version": "1.0.0",
   "description": "HTTP API service",
-  "title": "GEBREW API documentation",
-  "doc-url": ""
+  "title": "AUTAR API documentation",
+  "url": "<base_url>"
 }
 

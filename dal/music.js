@@ -1,4 +1,4 @@
-// Access Layer for Farmer Data.
+// Access Layer for Music Data.
 
 // NOTES:
 // .population() specifies the references that you want
@@ -8,10 +8,10 @@
 /**
  * Load Module Dependencies.
  */
-var debug   = require('debug')('api:dal-farmer');
+var debug   = require('debug')('api:dal-Music');
 var moment  = require('moment');
 
-var Farmer        = require('../models/farmer');
+var Music        = require('../models/music');
 
 // var population = [{ 
 //      path: 'land'
@@ -26,32 +26,31 @@ var population = [{
   }
 ];
 /**
- * create a new farmer.
+ * create a new Music.
  *
- * @desc  creates a new farmer and saves them
+ * @desc  creates a new Music and saves them
  *        in the database
  *
- * @param {Object}  FarmerData  Data for the Farmer to create
+ * @param {Object}  MusicData  Data for the Music to create
  * @param {Function} cb       Callback for once saving is complete
  */
-exports.create = function create(farmerData, cb) {
-  debug('creating a new farmer');
+exports.create = function create(musicData, cb) {
+  debug('creating a new Music');
+  // Create Music
+  var MusicModel  = new Music(musicData);
 
-  // Create Farmer
-  var FarmerModel  = new Farmer(farmerData);
-
-  FarmerModel.save(function saveFarmer(err, data) {
+  MusicModel.save(function saveMusic(err, data) {
     if (err) {
       return cb(err);
     }
 
 
-    exports.get({ _id: data._id }, function (err, farmer) {
+    exports.get({ _id: data._id }, function (err, doc) {
       if(err) {
         return cb(err);
       }
 
-      cb(null, farmer);
+      cb(null, doc);
 
     });
 
@@ -60,35 +59,35 @@ exports.create = function create(farmerData, cb) {
 };
 
 /**
- * delete a farmer
+ * delete a Music
  *
- * @desc  delete data of the farmer with the given
+ * @desc  delete data of the Music with the given
  *        id
  *
  * @param {Object}  query   Query Object
  * @param {Function} cb Callback for once delete is complete
  */
 exports.delete = function deleteItem(query, cb) {
-  debug('deleting farmer: ', query);
+  debug('deleting Music: ', query);
 
-  Farmer
+  Music
     .findOne(query)
     .populate(population)
-    .exec(function deleteFarmer(err, farmer) {
+    .exec(function deleteMusic(err, doc) {
       if (err) {
         return cb(err);
       }
 
-      if(!farmer) {
+      if(!doc) {
         return cb(null, {});
       }
 
-      Farmer.remove(function(err) {
+      Music.remove(function(err) {
         if(err) {
           return cb(err);
         }
 
-        cb(null, farmer);
+        cb(null, doc);
 
       });
 
@@ -96,9 +95,9 @@ exports.delete = function deleteItem(query, cb) {
 };
 
 /**
- * update a farmer
+ * update a Music
  *
- * @desc  update data of the farmer with the given
+ * @desc  update data of the Music with the given
  *        id
  *
  * @param {Object} query Query object
@@ -106,57 +105,57 @@ exports.delete = function deleteItem(query, cb) {
  * @param {Function} cb Callback for once update is complete
  */
 exports.update = function update(query, updates,  cb) {
-  debug('updating farmer: ', query);
+  debug('updating Music: ', query);
 
   var now = moment().toISOString();
 
   updates.last_modified = now;
 
-  Farmer
+  Music
     .findOneAndUpdate(query, updates)
     .populate(population)
-    .exec(function updateFarmer(err, farmer) {
+    .exec(function updateMusic(err, doc) {
       if(err) {
         return cb(err);
       }
 
-      cb(null, farmer || {});
+      cb(null, doc || {});
     });
 };
 
 /**
- * get a farmer.
+ * get a Music.
  *
- * @desc get a farmer with the given id from db
+ * @desc get a Music with the given id from db
  *
  * @param {Object} query Query Object
  * @param {Function} cb Callback for once fetch is complete
  */
 exports.get = function get(query, cb) {
-  debug('getting farmer ', query);
+  debug('getting Music ', query);
 
-  Farmer
+  Music
     .findOne(query)
     .populate(population)
-    .exec(function(err, farmer) {
+    .exec(function(err, doc) {
       if(err) {
         return cb(err);
       }
 
-      cb(null, farmer || {});
+      cb(null, doc || {});
     });
 };
 
 /**
- * get a collection of farmers
+ * get a collection of Music
  *
- * @desc get a collection of farmers from db
+ * @desc get a collection of Music from db
  *
  * @param {Object} query Query Object
  * @param {Function} cb Callback for once fetch is complete
  */
 exports.getCollection = function getCollection(query, cb) {
-  debug('fetching a collection of farmers');
+  debug('fetching a collection of Music');
 /**
  * Mongoose 4.5 support this
 
@@ -170,14 +169,14 @@ Project.find(query)
   })
   .exec(function(err, docs) {});
  */
- Farmer.find(query)
+ Music.find(query)
 .populate(population)
-    .exec(function getFarmersCollection(err, farmers) {
+    .exec(function getMusicCollection(err, doc) {
       if(err) {
         return cb(err);
       }
 
-     return cb(null, farmers);
+     return cb(null, doc);
 
   });
 
@@ -185,7 +184,7 @@ Project.find(query)
 
 exports.getCollectionBYPagination = function getCollectionBYPagination(query,queryOpts, cb) {
 
-  Farmer.paginate(query, queryOpts, function (err, result) {
+  Music.paginate(query, queryOpts, function (err, result) {
     // result.docs
     // result.total
     // result.limit - 10
