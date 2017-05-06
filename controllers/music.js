@@ -164,7 +164,7 @@ exports.uploadImage = function uploadImage(req, res, next) {
             return next(new Error("The extenstion (jpg|jpeg|png) of the file must be set!"));
         }
         // rename the file name
-        file.path = 'public/images/' +req.doc._id+ '.' + ext;// req.doc._id -> music Id
+        file.path = 'images/' +req.doc._id+ '.' + ext;// req.doc._id -> music Id
      
 
         fs.rename('public/images/'+ file.filename, file.path, function (err) {
