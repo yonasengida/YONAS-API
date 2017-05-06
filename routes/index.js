@@ -13,6 +13,6 @@ module.exports = function initRouter(app) {
   // Muscians Endpoint
  app.use('/muscians', muscianRouter);
   // Musics Endpoint
- app.use('/musics', musicRouter);
+ app.use('/music', musicRouter);
    
 };
