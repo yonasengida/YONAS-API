@@ -30,6 +30,10 @@ var app = express();
 // Set Middleware
 //app.use(bodyParser.json());
 app.use(bodyParser.json({limit:'50mb'})); 
+// static files
+app.use(express.static('public'));
+
+
 app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}));
 // Error Handlers
 app.use(expressValidator());
